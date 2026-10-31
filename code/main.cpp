@@ -8,5 +8,13 @@ int main() {
 
     ListDump(&lst);
 
+    ListInsert(&lst, 0, 43);
+
+    ListDump(&lst);
+
+    ListInsert(&lst, 0, 46);
+
+    ListDump(&lst);
+
     return 0;
 }

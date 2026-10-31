@@ -23,33 +23,53 @@ int ListCtor(lst_info *lst, size_t capacity) {
     lst->list[0].next = 0;
     lst->list[0].prev = 0;
     lst->list[0].data = POISON;
-    lst->clear_ind = 0;
+    lst->clear_ind = 1;
     return 0;
 }
 
 
 //void ListDtor(lst_info *lst);
 
-/*
+
 int ListInsert(lst_info *lst, size_t ind, elem_t elem) {
     assert(lst);
-    assert(ind > 0);
+    assert(ind >= 0);
     if (lst->list[ind].next < 0) {
-        OUTPUT_ERROR("Got index of non existing element: ind = %ld\n", ind);
+        OUTPUT_ERROR("Got index of non existing element: ind = %zu\n", ind);
     }
 
-    int new_ind = 0;
-    if (GetNewIndex(lst, &new_ind)) {OUTPUT_ERROR("Didn't get new_ind = %ld\n", new_ind);}
+    size_t new_ind = 0;
+    if (GetNewIndex(lst, &new_ind)) {OUTPUT_ERROR("Didn't get new_ind = %zu\n", new_ind);}
 
     lst->list[new_ind].data = elem;
     lst->list[new_ind].next = lst->list[ind].next;
     lst->list[new_ind].prev = lst->list[ind].prev;
 
-    lst->list[lst->list[ind].next].prev = new_ind;
-    lst->list[ind].next = new_ind;
+    lst->list[lst->list[ind].next].prev = (int) new_ind;
+    lst->list[ind].next = (int) new_ind;
 
+    lst->size++;
+
+    return 0;
 }
-*/
+
+int GetNewIndex(lst_info *lst, size_t *new_ind) {
+    *new_ind = lst->clear_ind;
+
+    if (lst->list[lst->clear_ind].next >= 0) {
+        OUTPUT_ERROR("Not initialized index >= 0: %d\n", lst->list[lst->clear_ind].next);
+    }
+    lst->clear_ind = (size_t) -lst->list[lst->clear_ind].next;
+
+    lst->list[lst->clear_ind].prev = 0;
+
+    lst->list[*new_ind].data = POISON;
+    lst->list[*new_ind].next = 0;
+    lst->list[*new_ind].prev = 0;
+
+    return 0;
+}
+
 
 
 void ListDump(const lst_info *lst) {

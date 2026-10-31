@@ -27,6 +27,7 @@ typedef struct _mylist_info {
 int ListCtor(lst_info *lst, size_t size);
 void ListDtor(lst_info *lst);
 int ListInsert(lst_info *lst, size_t ind, elem_t elem);
+int GetNewIndex(lst_info *lst, size_t *new_ind);
 int ListDel(lst_info *lst, size_t ind, elem_t *elem);
 int ListPush(lst_info *lst, elem_t elem);
 int ListPop(lst_info *lst, elem_t *elem);
