@@ -97,6 +97,8 @@ void ListDelete(lst_info *lst, size_t ind, elem_t *elem) {
 
     lst->list[lst->clear_ind].prev = - (int) ind;
     lst->list[- lst->list[ind].prev].next = - (int) ind;
+
+    lst->size--;
 }
 
 
