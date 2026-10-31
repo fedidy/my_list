@@ -12,6 +12,10 @@ int ListCtor(lst_info *lst, size_t capacity) {
     lst->capacity = capacity;
     lst->size = 0;
 
+    for (size_t i = 0; i < capacity; i++) {
+        lst->list[i].data = POISON;
+    }
+
     for (int i = 0; i < (int) capacity; i++) {
         lst->list[i].next = -i - 1;
     }
@@ -45,7 +49,7 @@ int ListInsert(lst_info *lst, size_t ind, elem_t elem) {
 
     lst->list[new_ind].data = elem;
     lst->list[new_ind].next = lst->list[ind].next;
-    lst->list[new_ind].prev = lst->list[ind].prev;
+    lst->list[new_ind].prev = (int) ind;
 
     lst->list[lst->list[ind].next].prev = (int) new_ind;
     lst->list[ind].next = (int) new_ind;
@@ -56,6 +60,9 @@ int ListInsert(lst_info *lst, size_t ind, elem_t elem) {
 }
 
 int GetNewIndex(lst_info *lst, size_t *new_ind) {
+    assert(lst);
+    assert(new_ind);
+
     *new_ind = lst->clear_ind;
 
     if (lst->list[lst->clear_ind].next >= 0) {
@@ -74,6 +81,23 @@ int GetNewIndex(lst_info *lst, size_t *new_ind) {
 }
 
 
+void ListDelete(lst_info *lst, size_t ind, elem_t *elem) {
+    assert(lst);
+    assert(elem);
+
+    // delete from list
+    lst->list[lst->list[ind].prev].next = lst->list[ind].next;
+    lst->list[lst->list[ind].next].prev = lst->list[ind].prev;
+    *elem = lst->list[ind].data;
+
+    // add to clear list
+    lst->list[ind].next = - (int) lst->clear_ind;
+    lst->list[ind].prev = lst->list[lst->clear_ind].prev;
+    lst->list[ind].data = POISON;
+
+    lst->list[lst->clear_ind].prev = - (int) ind;
+    lst->list[lst->list[ind].prev].next = - (int) ind;
+}
 
 void ListDump(const lst_info *lst) {
     assert(lst);
