@@ -15,10 +15,12 @@ int ListCtor(lst_info *lst, size_t capacity) {
     for (int i = 0; i < (int) capacity; i++) {
         lst->list[i].next = -i - 1;
     }
-    lst->list[capacity - 1].next = 0;
+    lst->list[capacity - 1].next = -1;
+
     for (int i = 0; i < (int) capacity; i++) {
         lst->list[i].prev = -i + 1;
     }
+    lst->list[1].prev = - (int) capacity + 1;
 
     lst->list[0].next = 0;
     lst->list[0].prev = 0;
@@ -61,7 +63,8 @@ int GetNewIndex(lst_info *lst, size_t *new_ind) {
     }
     lst->clear_ind = (size_t) -lst->list[lst->clear_ind].next;
 
-    lst->list[lst->clear_ind].prev = 0;
+    lst->list[-lst->list[*new_ind].prev].next = - (int) (lst->clear_ind);
+    lst->list[lst->clear_ind].prev = lst->list[*new_ind].prev;
 
     lst->list[*new_ind].data = POISON;
     lst->list[*new_ind].next = 0;
