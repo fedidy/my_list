@@ -16,5 +16,11 @@ int main() {
 
     ListDump(&lst);
 
+    elem_t a = 0;
+    ListDelete(&lst, 1, &a);
+    printf(PRINT_ELEM "\n", a);
+
+    ListDump(&lst);
+
     return 0;
 }
