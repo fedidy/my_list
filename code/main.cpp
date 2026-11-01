@@ -32,6 +32,18 @@ int main() {
     printf(PRINT_ELEM "\n", b);
     ListDump(&lst);
 
+    ListPush(&lst, 432);
+    ListPush(&lst, 42);
+    ListInsert(&lst, 6, 12);
+    ListPush(&lst, 56);
+    ListPush(&lst, 54);
+    ListPush(&lst, 56466);
+    ListPush(&lst, 90);
+
+    ListDelete(&lst, 8, &b);
+
+    ListDump(&lst);
+
     GraphDump(&lst, "graph.txt");
 
     ListDtor(&lst);
