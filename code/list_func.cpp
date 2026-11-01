@@ -142,3 +142,41 @@ void ListDump(const lst_info *lst) {
 
     #undef DUMP_OUT
 }
+
+
+
+int ListVerity(const lst_info *lst) {
+    assert(lst);
+
+    FILE* verity_output = stdout;
+
+    #define VERITY_OUT(...)\
+    fprintf(verity_output, __VA_ARGS__)
+
+    if (lst->size > (size_t) - 100000) {
+        OUTPUT_ERROR("Bad size: %zu\n", lst->size);
+    }
+    if (lst->capacity > (size_t) -100000) {
+        OUTPUT_ERROR("Bad capacity: %zu\n", lst->capacity);
+    }
+    if (lst->clear_ind > (size_t) -100000) {
+        OUTPUT_ERROR("Bad clear_ind: %zu\n", lst->clear_ind);
+    }
+
+    int ind = lst->list[0].next;
+    size_t cnt = 0;
+    VERITY_OUT("Data in the right order\n");
+    while (ind != 0) {
+        VERITY_OUT(PRINT_ELEM " ", lst->list[ind].data);
+        ind = lst->list[ind].next;
+        cnt++;
+        if (cnt > lst->size) {
+            OUTPUT_ERROR("Got stuck in list on ind = %d\n", ind);
+        }
+    }
+    VERITY_OUT("\n");
+
+    #undef VERITY_OUT
+    return 0;
+}
+
