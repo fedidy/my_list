@@ -3,6 +3,8 @@
 
 void GraphDump(const lst_info *lst, const char* filename) {
     FILE* gr_file = fopen(filename, "w");
+    assert(lst); assert(filename);
+    assert(lst); assert(filename);
 
     #define PRINT_GRAPH(...) fprintf(gr_file, __VA_ARGS__)
 
@@ -26,6 +28,7 @@ void GraphDump(const lst_info *lst, const char* filename) {
 
 
 void GenNodes(const lst_info *lst, FILE* gr_file) {
+    assert(lst); assert(gr_file);
     for (size_t i = 0; i < lst->capacity; i++) {
         PRINT_GRAPH("\tnode%zu [ shape = Mrecord; style = filled;"
                     "fillcolor = \"#ff80cc\"; color = \"#808080\";\n"
@@ -41,6 +44,7 @@ void GenNodes(const lst_info *lst, FILE* gr_file) {
 
 void GenNextArrows(const lst_info *lst, FILE* gr_file) {
     PRINT_GRAPH("\tedge [ weight = 1; color = \"#00ff00\"; ]\n\t");
+    assert(lst); assert(gr_file);
     PRINT_GRAPH("node0:<f1> -> ");
     int current = lst->list[0].next;
     for (size_t i = 0; i < lst->size; i++) {
@@ -51,6 +55,7 @@ void GenNextArrows(const lst_info *lst, FILE* gr_file) {
 
 void GenPrevArrows(const lst_info *lst, FILE* gr_file) {
     PRINT_GRAPH("\tedge [ weight = 1; color = \"#ff0000\"; ]\n\t");
+    assert(lst); assert(gr_file);
     PRINT_GRAPH("node0:<f2> -> ");
     int current = lst->list[0].prev;
     for (size_t i = 0; i < lst->size; i++) {
@@ -61,6 +66,7 @@ void GenPrevArrows(const lst_info *lst, FILE* gr_file) {
 
 void GenNextArrowsClear(const lst_info *lst, FILE* gr_file) {
     PRINT_GRAPH("\tedge [ weight = 1; color = \"#0000ff\"; ]\n\t");
+    assert(lst); assert(gr_file);
     PRINT_GRAPH("node%d:<f1> -> ", (int) lst->clear_ind);
     int current = - lst->list[lst->clear_ind].next;
     if (lst->capacity - lst->size > 1) {
@@ -73,6 +79,7 @@ void GenNextArrowsClear(const lst_info *lst, FILE* gr_file) {
 
 void GenPrevArrowsClear(const lst_info *lst, FILE* gr_file) {
     PRINT_GRAPH("\tedge [ weight = 1; color = \"#8000ff\"; ]\n\t");
+    assert(lst); assert(gr_file);
     PRINT_GRAPH("node%d:<f2> -> ", (int) lst->clear_ind);
     int current = - lst->list[lst->clear_ind].prev;
     if (lst->capacity - lst->size > 1) {
