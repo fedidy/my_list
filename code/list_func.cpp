@@ -109,6 +109,25 @@ void ListDelete(lst_info *lst, size_t ind, elem_t *elem) {
 }
 
 
+int ListPush(lst_info *lst, elem_t elem) {
+    assert(lst);
+
+    size_t new_ind = 0;
+    if (GetNewIndex(lst, &new_ind)) {OUTPUT_ERROR("Didn't get new_ind = %zu\n", new_ind);}
+
+    lst->list[new_ind].data = elem;
+    lst->list[new_ind].next = 0;
+    lst->list[new_ind].prev = lst->list[0].prev;
+
+    lst->list[lst->list[0].prev].next = (int) new_ind;
+    lst->list[0].prev = (int) new_ind;
+
+    lst->size++;
+
+    return 0;
+}
+
+
 void ListDump(const lst_info *lst) {
     assert(lst);
 
