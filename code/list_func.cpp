@@ -35,7 +35,7 @@ int ListCtor(lst_info *lst, size_t capacity) {
 
 
 void ListDtor(lst_info *lst) {
-    assert(lst);
+    assert(lst); assert(lst->list);
 
     free(lst->list);
     lst->capacity = 0;
@@ -45,7 +45,7 @@ void ListDtor(lst_info *lst) {
 
 
 int ListInsert(lst_info *lst, size_t ind, elem_t elem) {
-    assert(lst);
+    assert(lst); assert(lst->list);
     assert(ind >= 0);
     if (lst->list[ind].next < 0) {
         OUTPUT_ERROR("Got index of non existing element: ind = %zu\n", ind);
@@ -67,7 +67,7 @@ int ListInsert(lst_info *lst, size_t ind, elem_t elem) {
 }
 
 int GetNewIndex(lst_info *lst, size_t *new_ind) {
-    assert(lst);
+    assert(lst); assert(lst->list);
     assert(new_ind);
 
     *new_ind = lst->clear_ind;
@@ -89,7 +89,7 @@ int GetNewIndex(lst_info *lst, size_t *new_ind) {
 
 
 void ListDelete(lst_info *lst, size_t ind, elem_t *elem) {
-    assert(lst);
+    assert(lst); assert(lst->list);
     assert(elem);
 
     // delete from list
@@ -110,7 +110,7 @@ void ListDelete(lst_info *lst, size_t ind, elem_t *elem) {
 
 
 int ListPush(lst_info *lst, elem_t elem) {
-    assert(lst);
+    assert(lst); assert(lst->list);
 
     size_t new_ind = 0;
     if (GetNewIndex(lst, &new_ind)) {OUTPUT_ERROR("Didn't get new_ind = %zu\n", new_ind);}
@@ -129,7 +129,7 @@ int ListPush(lst_info *lst, elem_t elem) {
 
 
 void ListDump(const lst_info *lst) {
-    assert(lst);
+    assert(lst); assert(lst->list);
 
     FILE* dump_output = stdout;
 
@@ -187,6 +187,9 @@ int ListVerity(const lst_info *lst) {
     }
     if (lst->clear_ind > (size_t) -100000) {
         OUTPUT_ERROR("Bad clear_ind: %zu\n", lst->clear_ind);
+    }
+    if (lst->list == NULL) {
+        OUTPUT_ERROR("NULL pointer to list\n");
     }
 
     int ind = lst->list[0].next;
