@@ -152,6 +152,12 @@ void ListDump(const lst_info *lst) {
 
     const char* sep = "\t";
 
+    DUMP_OUT("INDEX:\t");
+    for (size_t i = 0; i < lst->capacity; i++) {
+        DUMP_OUT("%zu%s", i, sep);
+    }
+    DUMP_OUT("\n");
+
     DUMP_OUT("DATA:\t");
     for (size_t i = 0; i < lst->capacity; i++) {
         DUMP_OUT(PRINT_ELEM "%s", lst->list[i].data, sep);
