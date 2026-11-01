@@ -15,7 +15,8 @@ CC = g++
 
 CODE =  code/list_func.cpp\
 		code/main.cpp\
-		code/graph.cpp
+		code/graph.cpp\
+		code/html.cpp
 
 NAME ?= list
 
