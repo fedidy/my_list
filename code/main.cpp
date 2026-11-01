@@ -26,6 +26,11 @@ int main() {
     ListVerity(&lst);
     ListDump(&lst);
 
+    elem_t b = 0;
+    ListPop(&lst, &b);
+    printf(PRINT_ELEM "\n", b);
+    ListDump(&lst);
+
     ListDtor(&lst);
 
     return 0;
