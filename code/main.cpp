@@ -44,7 +44,7 @@ int main() {
 
     ListDump(&lst);
 
-    GraphDump(&lst, "graph.txt");
+    GraphDump(&lst, "graph");
 
     ListDtor(&lst);
 

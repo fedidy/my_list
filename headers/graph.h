@@ -3,7 +3,9 @@
 
 #include "list_def.h"
 
-void GraphDump(const lst_info *lst, const char* filename);
+int GraphDump(const lst_info *lst, const char* filename);
+
+int GenGraph(const lst_info *lst, const char* filename);
 
 void GenNodes(const lst_info *lst, FILE* gr_file);
 void GenNextArrows(const lst_info *lst, FILE* gr_file);

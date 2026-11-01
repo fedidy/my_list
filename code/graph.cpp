@@ -1,10 +1,36 @@
 #include "list_def.h"
 #include "graph.h"
+#include <assert.h>
+#include <stdlib.h>
+#include <string.h>
 
-void GraphDump(const lst_info *lst, const char* filename) {
-    FILE* gr_file = fopen(filename, "w");
+
+int GraphDump(const lst_info *lst, const char* filename) {
     assert(lst); assert(filename);
+    GenGraph(lst, filename);
+
+    size_t len = 2 * strlen(filename) + sizeof("dot -Tpng .txt -o .png");
+    char* cmd = (char*) calloc(len, sizeof(char));
+    if (cmd == NULL) {OUTPUT_ERROR("Can't allocate cmd\n");}
+    snprintf(cmd, len, "dot -Tpng %s.txt -o %s.png\n", filename, filename);
+    if (system(cmd)) {
+        OUTPUT_ERROR("Can't create %s.png\n", filename);
+    }
+    return 0;
+}
+
+
+int GenGraph(const lst_info *lst, const char* filename) {
     assert(lst); assert(filename);
+
+    //?
+    size_t len = strlen(filename) + sizeof(".txt");
+    char* fullname = (char*) calloc(len, sizeof(char));
+    if (fullname == NULL) {OUTPUT_ERROR("Can't allocate fullname\n");}
+    snprintf(fullname, len, "%s.txt", filename);
+
+    FILE* gr_file = fopen(fullname, "w");
+    if (gr_file == NULL) {OUTPUT_ERROR("Can't open file %s\n", fullname);}
 
     #define PRINT_GRAPH(...) fprintf(gr_file, __VA_ARGS__)
 
@@ -24,8 +50,8 @@ void GraphDump(const lst_info *lst, const char* filename) {
 
     PRINT_GRAPH("}\n");
     fclose(gr_file);
+    return 0;
 }
-
 
 void GenNodes(const lst_info *lst, FILE* gr_file) {
     assert(lst); assert(gr_file);
@@ -43,8 +69,8 @@ void GenNodes(const lst_info *lst, FILE* gr_file) {
 }
 
 void GenNextArrows(const lst_info *lst, FILE* gr_file) {
-    PRINT_GRAPH("\tedge [ weight = 1; color = \"#00ff00\"; ]\n\t");
     assert(lst); assert(gr_file);
+    PRINT_GRAPH("\tedge [ weight = 0; color = \"#00ff00\"; ]\n\t");
     PRINT_GRAPH("node0:<f1> -> ");
     int current = lst->list[0].next;
     for (size_t i = 0; i < lst->size; i++) {
@@ -54,8 +80,8 @@ void GenNextArrows(const lst_info *lst, FILE* gr_file) {
 }
 
 void GenPrevArrows(const lst_info *lst, FILE* gr_file) {
-    PRINT_GRAPH("\tedge [ weight = 1; color = \"#ff0000\"; ]\n\t");
     assert(lst); assert(gr_file);
+    PRINT_GRAPH("\tedge [ weight = 0; color = \"#ff0000\"; ]\n\t");
     PRINT_GRAPH("node0:<f2> -> ");
     int current = lst->list[0].prev;
     for (size_t i = 0; i < lst->size; i++) {
@@ -65,8 +91,8 @@ void GenPrevArrows(const lst_info *lst, FILE* gr_file) {
 }
 
 void GenNextArrowsClear(const lst_info *lst, FILE* gr_file) {
-    PRINT_GRAPH("\tedge [ weight = 1; color = \"#0000ff\"; ]\n\t");
     assert(lst); assert(gr_file);
+    PRINT_GRAPH("\tedge [ weight = 0; color = \"#0000ff\"; ]\n\t");
     PRINT_GRAPH("node%d:<f1> -> ", (int) lst->clear_ind);
     int current = - lst->list[lst->clear_ind].next;
     if (lst->capacity - lst->size > 1) {
@@ -78,8 +104,8 @@ void GenNextArrowsClear(const lst_info *lst, FILE* gr_file) {
 }
 
 void GenPrevArrowsClear(const lst_info *lst, FILE* gr_file) {
-    PRINT_GRAPH("\tedge [ weight = 1; color = \"#8000ff\"; ]\n\t");
     assert(lst); assert(gr_file);
+    PRINT_GRAPH("\tedge [ weight = 0; color = \"#8000ff\"; ]\n\t");
     PRINT_GRAPH("node%d:<f2> -> ", (int) lst->clear_ind);
     int current = - lst->list[lst->clear_ind].prev;
     if (lst->capacity - lst->size > 1) {
