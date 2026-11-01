@@ -14,7 +14,8 @@ CFLAGS += ${SANITIZER}
 CC = g++
 
 CODE =  code/list_func.cpp\
-		code/main.cpp
+		code/main.cpp\
+		code/graph.cpp
 
 NAME ?= list
 

@@ -1,4 +1,5 @@
 #include "list_def.h"
+#include "graph.h"
 
 
 int main() {
@@ -30,6 +31,8 @@ int main() {
     ListPop(&lst, &b);
     printf(PRINT_ELEM "\n", b);
     ListDump(&lst);
+
+    GraphDump(&lst, "graph.txt");
 
     ListDtor(&lst);
 
