@@ -34,7 +34,14 @@ int ListCtor(lst_info *lst, size_t capacity) {
 }
 
 
-//void ListDtor(lst_info *lst);
+void ListDtor(lst_info *lst) {
+    assert(lst);
+
+    free(lst->list);
+    lst->capacity = 0;
+    lst->size = 0;
+    lst->clear_ind = 0;
+}
 
 
 int ListInsert(lst_info *lst, size_t ind, elem_t elem) {
