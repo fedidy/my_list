@@ -13,6 +13,7 @@ int main() {
     ListDump(&lst);
 
     ListInsert(&lst, 0, 46);
+    ListVerity(&lst);
 
     ListDump(&lst);
 
@@ -20,6 +21,7 @@ int main() {
     ListDelete(&lst, 1, &a);
     printf(PRINT_ELEM "\n", a);
 
+    ListVerity(&lst);
     ListDump(&lst);
 
     return 0;
