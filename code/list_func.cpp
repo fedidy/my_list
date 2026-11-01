@@ -128,6 +128,12 @@ int ListPush(lst_info *lst, elem_t elem) {
 }
 
 
+void ListPop(lst_info *lst, elem_t *elem) {
+    assert(lst); assert(lst->list);
+    ListDelete(lst, (size_t) lst->list[0].prev, elem);
+}
+
+
 void ListDump(const lst_info *lst) {
     assert(lst); assert(lst->list);
 

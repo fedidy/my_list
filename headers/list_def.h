@@ -31,7 +31,7 @@ int ListInsert(lst_info *lst, size_t ind, elem_t elem);
 int GetNewIndex(lst_info *lst, size_t *new_ind);
 void ListDelete(lst_info *lst, size_t ind, elem_t *elem);
 int ListPush(lst_info *lst, elem_t elem);
-int ListPop(lst_info *lst, elem_t *elem);
+void ListPop(lst_info *lst, elem_t *elem);
 void ListDump(const lst_info *lst);
 int ListVerity(const lst_info *lst);
 
