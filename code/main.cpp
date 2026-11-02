@@ -49,6 +49,28 @@ int main() {
 
     GraphDump(&lst, "graph");
 
+    ListPush(&lst, 90);
+    ListPush(&lst, 90);
+    ListPush(&lst, 90);
+    ListPush(&lst, 90);
+    HtmlDump(&lst, html_file, "dump8");
+    ListPush(&lst, 90);
+    HtmlDump(&lst, html_file, "dump9");
+    ListPush(&lst, 90);
+    HtmlDump(&lst, html_file, "dump10");
+    ListPush(&lst, 90);
+    ListPush(&lst, 90);
+    ListPush(&lst, 90);
+    ListPush(&lst, 90);
+    ListPush(&lst, 90);
+    ListPush(&lst, 90);
+    ListPush(&lst, 90);
+    ListPush(&lst, 90);
+    ListPush(&lst, 90);
+    ListPush(&lst, 90);
+    ListPush(&lst, 90);
+    HtmlDump(&lst, html_file, "dump11");
+
     ListDtor(&lst);
 
     HtmlExit(html_file);
