@@ -23,7 +23,6 @@ int GraphDump(const lst_info *lst, const char* filename) {
 int GenGraph(const lst_info *lst, const char* filename) {
     assert(lst); assert(filename);
 
-    //?
     size_t len = strlen(filename) + sizeof(".txt");
     char* fullname = (char*) calloc(len, sizeof(char));
     if (fullname == NULL) {OUTPUT_ERROR("Can't allocate fullname\n");}
@@ -37,14 +36,13 @@ int GenGraph(const lst_info *lst, const char* filename) {
     PRINT_GRAPH("digraph {\n");
 
     GenNodes(lst, gr_file);
-    //next
+    GenClearInd(lst, gr_file);
+
     GenNextArrows(lst, gr_file);
-    //prev
     GenPrevArrows(lst, gr_file);
+
     //for clear data
-    //next
     GenNextArrowsClear(lst, gr_file);
-    //prev
     GenPrevArrowsClear(lst, gr_file);
 
 
@@ -56,16 +54,31 @@ int GenGraph(const lst_info *lst, const char* filename) {
 void GenNodes(const lst_info *lst, FILE* gr_file) {
     assert(lst); assert(gr_file);
     for (size_t i = 0; i < lst->capacity; i++) {
-        PRINT_GRAPH("\tnode%zu [ shape = Mrecord; style = filled;"
-                    "fillcolor = \"#ff80cc\"; color = \"#808080\";\n"
-                    "\t\tlabel = \"{ index = %zu | data = " PRINT_ELEM " | { <f1> next = %d | <f2> prev = %d } }\"; ]\n",
-                    i, i, lst->list[i].data, lst->list[i].next, lst->list[i].prev);
+        if (lst->list[i].data != POISON) {
+            PRINT_GRAPH("\tnode%zu [ shape = Mrecord; style = filled; "
+                        "fillcolor = \"#ff80cc\"; color = \"#808080\";\n"
+                        "\t\tlabel = \"{ index = %zu | data = " PRINT_ELEM " | { <f1> next = %d | <f2> prev = %d } }\"; ]\n",
+                        i, i, lst->list[i].data, lst->list[i].next, lst->list[i].prev);
+        } else {
+            PRINT_GRAPH("\tnode%zu [ shape = Mrecord; style = filled; "
+                        "fillcolor = \"#00ffff\"; color = \"#ff0000\";\n"
+                        "\t\tlabel = \"{ index = %zu | data = " PRINT_ELEM " | { <f1> next = %d | <f2> prev = %d } }\"; ]\n",
+                        i, i, lst->list[i].data, lst->list[i].next, lst->list[i].prev);
+        }
     }
 
     PRINT_GRAPH("\tedge [ weight = 100000; color = \"#000000\"; ]\n\t"); //will be invisible
     for (size_t i = 0; i < lst->capacity - 1; i++) {
         PRINT_GRAPH("node%zu -> ", i);
     } PRINT_GRAPH("node%zu\n", lst->capacity - 1);
+}
+
+void GenClearInd(const lst_info *lst, FILE* gr_file) {
+    PRINT_GRAPH("\tnode_clear_ind [ shape = Mrecord; style = filled; "
+                "fillcolor = \"#ffff00\"; color = \"#0000ff\";\n"
+                "\t\tlabel = \"clear_ind\"; ]\n");
+    PRINT_GRAPH("\tedge [ weight = 1; color = \"#0000ff\"; ]\n\t");
+    PRINT_GRAPH("\tnode_clear_ind -> node%zu\n", lst->clear_ind);
 }
 
 void GenNextArrows(const lst_info *lst, FILE* gr_file) {
