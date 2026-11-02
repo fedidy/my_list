@@ -12,13 +12,13 @@
 int HtmlInit(const char* filename, FILE** html_file) {
     assert(filename); assert(html_file);
 
+    //mkdir(
     system("mkdir html_dump\n");
-    system("cd html_dump\n");
 
-    size_t len = strlen(filename) + sizeof(".html");
+    size_t len = strlen(filename) + sizeof(".html") + sizeof("html_dump/");
     char* fullname = (char*) calloc(len, sizeof(char));
     if (fullname == NULL) {OUTPUT_ERROR("Can't allocate fullname\n");}
-    snprintf(fullname, len, "%s.html", filename);
+    snprintf(fullname, len, "html_dump/%s.html", filename);
 
     *html_file = fopen(fullname, "w");
     if (*html_file == NULL) {OUTPUT_ERROR("Can't open %s\n", fullname);}
@@ -33,19 +33,20 @@ int HtmlInit(const char* filename, FILE** html_file) {
 void HtmlExit(FILE* html_file) {
     assert(html_file);
     fclose(html_file);
-    system("cd ..\n");
 }
 
 
-void HtmlDump(const lst_info *lst, FILE* html_file, const char* dump_name) {
+int HtmlDump(const lst_info *lst, FILE* html_file, const char* dump_name) {
     assert(lst); assert(html_file);
     PRINT_HTML("<h3> DUMP %s </h3>\n\n", dump_name);
 
     HtmlTextDump(lst, html_file);
 
-    HtmlPngDump(lst, html_file, dump_name);
+    if (HtmlPngDump(lst, html_file, dump_name)) return -1;
 
     PRINT_HTML("<h3> DUMP %s END </h3>\n\n", dump_name);
+
+    return 0;
 }
 
 void HtmlTextDump(const lst_info *lst, FILE* html_file) {
@@ -85,12 +86,19 @@ void HtmlTextDump(const lst_info *lst, FILE* html_file) {
 }
 
 
-void HtmlPngDump(const lst_info *lst, FILE* html_file, const char* dump_name) {
+int HtmlPngDump(const lst_info *lst, FILE* html_file, const char* dump_name) {
     PRINT_HTML("Image:\n");
 
-    GraphDump(lst, dump_name);
+    size_t len = strlen(dump_name) + sizeof("html_dump/");
+    char* full_dump_name = (char*) calloc(len, sizeof(char));
+    if (full_dump_name == NULL) {OUTPUT_ERROR("Can't allocate full_dump_name\n");}
+    snprintf(full_dump_name, len, "html_dump/%s", dump_name);
+
+    GraphDump(lst, full_dump_name);
 
     PRINT_HTML("<img src=%s.png width=%dpx>\n\n", dump_name, IMG_WIDTH);
+
+    return 0;
 }
 
 
