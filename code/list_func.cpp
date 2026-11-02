@@ -52,6 +52,10 @@ int ListInsert(lst_info *lst, size_t ind, elem_t elem) {
         OUTPUT_ERROR("Got index of non existing element: ind = %zu\n", ind);
     }
 
+    if (lst->size == (lst->capacity - 2)) {
+        ListReallocUp(lst);
+    }
+
     size_t new_ind = 0;
     if (GetNewIndex(lst, &new_ind)) {OUTPUT_ERROR("Didn't get new_ind = %zu\n", new_ind);}
 
@@ -112,6 +116,10 @@ void ListDelete(lst_info *lst, size_t ind, elem_t *elem) {
 
 int ListPush(lst_info *lst, elem_t elem) {
     assert(lst); assert(lst->list);
+
+    if (lst->size == (lst->capacity - 2)) {
+        ListReallocUp(lst);
+    }
 
     size_t new_ind = 0;
     if (GetNewIndex(lst, &new_ind)) {OUTPUT_ERROR("Didn't get new_ind = %zu\n", new_ind);}
@@ -189,8 +197,11 @@ int ListVerity(const lst_info *lst) {
 
     FILE* verity_output = stdout;
 
+    /*
     #define VERITY_OUT(...)\
     fprintf(verity_output, __VA_ARGS__)
+    */
+    #define VERITY_OUT(...) (void) verity_output
 
     if (lst->size > (size_t) - 100000) {
         OUTPUT_ERROR("Bad size: %zu\n", lst->size);
@@ -222,3 +233,26 @@ int ListVerity(const lst_info *lst) {
     return 0;
 }
 
+
+int ListReallocUp(lst_info *lst) {
+    assert(lst); assert(lst->list);
+
+    size_t new_capacity = lst->capacity * REALLOC_UP_COEF;
+    lst->list = (gl_elem *) realloc(lst->list, new_capacity * sizeof(gl_elem));
+    if (lst->list == NULL) {OUTPUT_ERROR("Can't reallocate list\n");}
+
+    for (int i = (int) lst->capacity; i < (int) new_capacity; i++) {
+        lst->list[i].data = POISON;
+        lst->list[i].next = - (i + 1);
+        lst->list[i].prev = - (i - 1);
+    }
+    lst->list[lst->capacity].prev = lst->list[lst->clear_ind].prev;
+    lst->list[new_capacity - 1].next = - (int) lst->clear_ind;
+
+    lst->list[ - lst->list[lst->clear_ind].prev].next = - (int) lst->capacity;
+    lst->list[lst->clear_ind].prev = - (new_capacity - 1);
+
+    lst->capacity = new_capacity;
+
+    return 0;
+}

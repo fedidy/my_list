@@ -7,6 +7,7 @@
 fprintf(stderr, "%s:%d:" text, __FILE__, __LINE__ __VA_OPT__(,) __VA_ARGS__); return -1
 
 const int POISON = 676767;
+const int REALLOC_UP_COEF = 2;
 
 typedef int elem_t;
 #define PRINT_ELEM "%d"
@@ -34,6 +35,7 @@ int ListPush(lst_info *lst, elem_t elem);
 void ListPop(lst_info *lst, elem_t *elem);
 void ListDump(const lst_info *lst);
 int ListVerity(const lst_info *lst);
+int ListReallocUp(lst_info *lst);
 
 
 #endif
