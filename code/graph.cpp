@@ -63,9 +63,9 @@ void GenNodes(const lst_info *lst, FILE* gr_file) {
     }
 
     PRINT_GRAPH("\tedge [ weight = 100000; color = \"#000000\"; ]\n\t"); //will be invisible
-    for (size_t i = 0; i < lst->capacity; i++) {
+    for (size_t i = 0; i < lst->capacity - 1; i++) {
         PRINT_GRAPH("node%zu -> ", i);
-    } PRINT_GRAPH("node0\n");
+    } PRINT_GRAPH("node%zu\n", lst->capacity - 1);
 }
 
 void GenNextArrows(const lst_info *lst, FILE* gr_file) {
