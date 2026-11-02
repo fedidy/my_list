@@ -4,10 +4,11 @@
 
 int ListCtor(lst_info *lst, size_t capacity) {
     assert(lst);
-    assert(capacity > 0);
+
+    if (capacity < 2) {OUTPUT_ERROR("Can't create list with capacity = %zu\n", capacity);}
 
     lst->list = (gl_elem*) calloc(capacity, sizeof(gl_elem));
-    if (lst->list == NULL) {OUTPUT_ERROR("Can't create list\n");}
+    if (lst->list == NULL) {OUTPUT_ERROR("Can't allocate list\n");}
 
     lst->capacity = capacity;
     lst->size = 0;
