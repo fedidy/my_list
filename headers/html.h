@@ -2,7 +2,8 @@
 #define HTML_H
 
 //const int IMG_WIDTH = 200;
-const int ELEMENT_HEIGHT = 50;
+//const int ELEMENT_HEIGHT = 50;
+const int ELEMENT_WIDTH = 100;
 
 int HtmlInit(const char* filename, FILE** html_file);
 void HtmlExit(FILE* html_file);

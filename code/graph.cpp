@@ -34,6 +34,8 @@ int GenGraph(const lst_info *lst, const char* filename) {
     #define PRINT_GRAPH(...) fprintf(gr_file, __VA_ARGS__)
 
     PRINT_GRAPH("digraph {\n");
+    PRINT_GRAPH("\trankdir=LR;\n");
+    //PRINT_GRAPH("\tgraph [ splines = ortho ]\n");
 
     GenNodes(lst, gr_file);
     GenClearInd(lst, gr_file);
@@ -57,17 +59,17 @@ void GenNodes(const lst_info *lst, FILE* gr_file) {
         if (lst->list[i].data != POISON) {
             PRINT_GRAPH("\tnode%zu [ shape = Mrecord; style = filled; "
                         "fillcolor = \"#ff80cc\"; color = \"#808080\";\n"
-                        "\t\tlabel = \"{ index = %zu | data = " PRINT_ELEM " | { <f1> next = %d | <f2> prev = %d } }\"; ]\n",
-                        i, i, lst->list[i].data, lst->list[i].next, lst->list[i].prev);
+                        "\t\tlabel = \" index = %zu | data = " PRINT_ELEM " | { <f2> prev = %d | <f1> next = %d } \"; ]\n",
+                        i, i, lst->list[i].data, lst->list[i].prev, lst->list[i].next);
         } else {
             PRINT_GRAPH("\tnode%zu [ shape = Mrecord; style = filled; "
                         "fillcolor = \"#00ffff\"; color = \"#ff0000\";\n"
-                        "\t\tlabel = \"{ index = %zu | data = " PRINT_ELEM " | { <f1> next = %d | <f2> prev = %d } }\"; ]\n",
-                        i, i, lst->list[i].data, lst->list[i].next, lst->list[i].prev);
+                        "\t\tlabel = \" index = %zu | data = " PRINT_ELEM " | { <f2> prev = %d | <f1> next = %d } \"; ]\n",
+                        i, i, lst->list[i].data, lst->list[i].prev, lst->list[i].next);
         }
     }
 
-    PRINT_GRAPH("\tedge [ weight = 100000; color = \"#000000\"; ]\n\t"); //will be invisible
+    PRINT_GRAPH("\tedge [ weight = 100000; color = \"#ffffff\"; ]\n\t"); //will be invisible
     for (size_t i = 0; i < lst->capacity - 1; i++) {
         PRINT_GRAPH("node%zu -> ", i);
     } PRINT_GRAPH("node%zu\n", lst->capacity - 1);
@@ -83,7 +85,7 @@ void GenClearInd(const lst_info *lst, FILE* gr_file) {
 
 void GenNextArrows(const lst_info *lst, FILE* gr_file) {
     assert(lst); assert(gr_file);
-    PRINT_GRAPH("\tedge [ weight = 0; color = \"#00ff00\"; ]\n\t");
+    PRINT_GRAPH("\tedge [ weight = 0; constraint = 0; color = \"#00ff00\"; ]\n\t");
     PRINT_GRAPH("node0:<f1> -> ");
     int current = lst->list[0].next;
     for (size_t i = 0; i < lst->size; i++) {
@@ -94,7 +96,7 @@ void GenNextArrows(const lst_info *lst, FILE* gr_file) {
 
 void GenPrevArrows(const lst_info *lst, FILE* gr_file) {
     assert(lst); assert(gr_file);
-    PRINT_GRAPH("\tedge [ weight = 0; color = \"#ff0000\"; ]\n\t");
+    PRINT_GRAPH("\tedge [ weight = 0; constraint = 0; color = \"#ff0000\"; ]\n\t");
     PRINT_GRAPH("node0:<f2> -> ");
     int current = lst->list[0].prev;
     for (size_t i = 0; i < lst->size; i++) {
@@ -105,7 +107,7 @@ void GenPrevArrows(const lst_info *lst, FILE* gr_file) {
 
 void GenNextArrowsClear(const lst_info *lst, FILE* gr_file) {
     assert(lst); assert(gr_file);
-    PRINT_GRAPH("\tedge [ weight = 0; color = \"#0000ff\"; ]\n\t");
+    PRINT_GRAPH("\tedge [ weight = 0; constraint = 0; color = \"#0000ff\"; ]\n\t");
     PRINT_GRAPH("node%d:<f1> -> ", (int) lst->clear_ind);
     int current = - lst->list[lst->clear_ind].next;
     if (lst->capacity - lst->size > 1) {
@@ -118,7 +120,7 @@ void GenNextArrowsClear(const lst_info *lst, FILE* gr_file) {
 
 void GenPrevArrowsClear(const lst_info *lst, FILE* gr_file) {
     assert(lst); assert(gr_file);
-    PRINT_GRAPH("\tedge [ weight = 0; color = \"#8000ff\"; ]\n\t");
+    PRINT_GRAPH("\tedge [ weight = 0; constraint = 0; color = \"#8000ff\"; ]\n\t");
     PRINT_GRAPH("node%d:<f2> -> ", (int) lst->clear_ind);
     int current = - lst->list[lst->clear_ind].prev;
     if (lst->capacity - lst->size > 1) {

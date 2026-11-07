@@ -96,8 +96,9 @@ int HtmlPngDump(const lst_info *lst, FILE* html_file, const char* dump_name) {
 
     GraphDump(lst, full_dump_name);
 
-    size_t img_height = lst->capacity * ELEMENT_HEIGHT;
-    PRINT_HTML("<img src=%s.png height=%zupx>\n\n", dump_name, img_height);
+    //size_t img_height = lst->capacity * ELEMENT_HEIGHT;
+    size_t img_width = lst->capacity * ELEMENT_WIDTH;
+    PRINT_HTML("<img src=%s.png width=%zupx>\n\n", dump_name, img_width);
 
     return 0;
 }
